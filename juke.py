@@ -8,6 +8,9 @@ import time
 import RPi.GPIO as GPIO
 from glob import glob
 
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(17, GPIO.IN)
+
 songs_17 = glob("songs/17/*")
 
 async_song = None
