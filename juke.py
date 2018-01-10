@@ -8,8 +8,11 @@ import time
 import RPi.GPIO as GPIO
 from glob import glob
 
+STOP_PIN = 22
+
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN)
+GPIO.setup(STOP_PIN, GPIO.IN)
 
 songs_17 = glob("songs/17/*")
 
@@ -42,7 +45,7 @@ while True:
             print "Starting ", chosen
             play(chosen)
 
-    if (GPIO.input(25) == False):
+    if (GPIO.input(STOP_PIN) == False):
         stop_if_playing()
 
     time.sleep(0.1)
