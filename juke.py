@@ -8,13 +8,18 @@ import time
 import RPi.GPIO as GPIO
 from glob import glob
 
-STOP_PIN = 22
 
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(17, GPIO.IN)
+
+
+STOP_PIN = 4
 GPIO.setup(STOP_PIN, GPIO.IN)
 
-songs_17 = glob("songs/17/*")
+songs = {}
+MUSIC_PINS = [17, 22]
+for pin in MUSIC_PINS:
+    songs[pin] = glob('songs/%s/*.mp3' % pin)
+    GPIO.setup(pin, GPIO.IN)
 
 async_song = None
 
@@ -24,6 +29,7 @@ def play(song_file):
     stop_if_playing()
     async_song = subprocess.Popen([
         'mpg123',
+        '-q',
         '--no-control',
         song_file
     ])
@@ -37,13 +43,14 @@ def stop_if_playing():
 
 
 while True:
-    if (GPIO.input(17) == False):
-        if len(songs_17) == 0:
-            print "No songs in folder 17!"
-        else:
-            chosen = random.choice(songs_17)
-            print "Starting ", chosen
-            play(chosen)
+    for pin in MUSIC_PINS:
+        if (GPIO.input(pin) == False):
+            if len(songs[pin]) == 0:
+                print 'No songs in folder %s!' % pin
+            else:
+                chosen = random.choice(songs[pin])
+                print "Starting %s" % chosen
+                play(chosen)
 
     if (GPIO.input(STOP_PIN) == False):
         stop_if_playing()
