@@ -24,6 +24,7 @@ for pin in MUSIC_PINS:
 def play(song_file):
     stop()
     # Async, main loop continues while song is playing
+    print "Starting %s" % chosen
     subprocess.Popen([
         'mpg123',
         '-q',
@@ -34,10 +35,12 @@ def play(song_file):
 
 def stop():
     # Synchronous, wait for killing to stop before continuing script
+    print "Stop"
     subprocess.call([
         "killall",
         "mgp123"
     ])
+    print "Stop complete"
 
 
 while True:
@@ -47,7 +50,6 @@ while True:
                 print 'No songs in folder %s!' % pin
             else:
                 chosen = random.choice(songs[pin])
-                print "Starting %s" % chosen
                 play(chosen)
 
     if (GPIO.input(STOP_PIN) == False):
