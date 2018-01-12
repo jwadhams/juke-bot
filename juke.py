@@ -21,13 +21,10 @@ for pin in MUSIC_PINS:
     songs[pin] = glob('songs/%s/*.mp3' % pin)
     GPIO.setup(pin, GPIO.IN)
 
-async_song = None
-
-
 def play(song_file):
-    global async_song
-    stop_if_playing()
-    async_song = subprocess.Popen([
+    stop()
+    # Async, main loop continues while song is playing
+    subprocess.Popen([
         'mpg123',
         '-q',
         '--no-control',
@@ -35,11 +32,12 @@ def play(song_file):
     ])
 
 
-def stop_if_playing():
-    global async_song
-    if async_song:
-        print "Stopping"
-        async_song.terminate()
+def stop():
+    # Synchronous, wait for killing to stop before continuing script
+    subprocess.call([
+        "killall",
+        "mgp123"
+    ])
 
 
 while True:
@@ -53,6 +51,6 @@ while True:
                 play(chosen)
 
     if (GPIO.input(STOP_PIN) == False):
-        stop_if_playing()
+        stop()
 
     time.sleep(0.1)
