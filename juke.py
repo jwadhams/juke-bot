@@ -21,6 +21,7 @@ for pin in MUSIC_PINS:
     songs[pin] = glob('songs/%s/*.mp3' % pin)
     GPIO.setup(pin, GPIO.IN)
 
+
 def play(song_file):
     stop()
     # Async, main loop continues while song is playing
@@ -31,6 +32,8 @@ def play(song_file):
         '--no-control',
         song_file
     ])
+    # Debounce a little, holding down the button shouldn't start 2+ songs
+    time.sleep(1)
 
 
 def stop():
@@ -38,7 +41,7 @@ def stop():
     print "Stop"
     subprocess.call([
         "killall",
-        "mgp123"
+        "mpg123"
     ])
     print "Stop complete"
 
