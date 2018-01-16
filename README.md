@@ -21,6 +21,13 @@ Build an SD card with Raspbian Lite.
 
 During setup it's nice to have your Raspberry Pi on the network. Unless you have a patching plan, it'll be nice to knock it off the network when it's ready to be installed.
 
-[Set up the audio player, and configure your Pi to always use the headphone jack](https://learn.adafruit.com/playing-sounds-and-using-buttons-with-raspberry-pi/install-audio)
+[Install the audio player (mpg123), and configure your Pi to always use the headphone jack](https://learn.adafruit.com/playing-sounds-and-using-buttons-with-raspberry-pi/install-audio)
 
-Note, you'll need to either reboot with HDMI disconnected, or [force the audio output to the headphone jack](https://www.raspberrypi.org/documentation/configuration/audio-config.md).
+Max out the software volume of the headphone jack, so you can control it at the speaker.
+
+```bash
+sudo amixer  sset PCM,0 100%
+```
+
+Install screen and/or supervisor to run it headless.
+`sudo apt-get install screen supervisor`
