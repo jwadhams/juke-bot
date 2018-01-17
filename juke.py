@@ -11,12 +11,18 @@ from glob import glob
 
 GPIO.setmode(GPIO.BCM)
 
+# Initialize the pin we'll connect to a stop button
+# To disable the stop button functionality, set this to None
+STOP_PIN = None
 
-STOP_PIN = 4
-GPIO.setup(STOP_PIN, GPIO.IN)
+# An array of pins that will connect to buttons,
+# and map to folders full of MP3s
+MUSIC_PINS = [17, 22, 4]
+
+if(STOP_PIN):
+    GPIO.setup(STOP_PIN, GPIO.IN)
 
 songs = {}
-MUSIC_PINS = [17, 22]
 for pin in MUSIC_PINS:
     songs[pin] = glob('songs/%s/*.mp3' % pin)
     GPIO.setup(pin, GPIO.IN)
@@ -55,7 +61,7 @@ while True:
                 chosen = random.choice(songs[pin])
                 play(chosen)
 
-    if (GPIO.input(STOP_PIN) == False):
+    if (STOP_PIN and GPIO.input(STOP_PIN) == False):
         stop()
 
     time.sleep(0.1)
