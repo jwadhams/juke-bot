@@ -3,7 +3,6 @@
 
 import subprocess
 import random
-# import re # regular expression support
 import time
 import RPi.GPIO as GPIO
 from glob import glob
@@ -24,6 +23,8 @@ if(STOP_PIN):
 
 songs = {}
 for pin in MUSIC_PINS:
+    # TODO : Don't rely on working directory, use script directory,
+    # like https://stackoverflow.com/a/5475224/8995
     songs[pin] = glob('songs/%s/*.mp3' % pin)
     GPIO.setup(pin, GPIO.IN)
 
@@ -32,6 +33,9 @@ def play(song_file):
     stop()
     # Async, main loop continues while song is playing
     print "Starting %s" % chosen
+    # TODO : if we held on to a reference for this process,
+    # we could .poll() before we killall to generate a skip counter
+    # (I'd still keep killall, its very resilient to race conditions)
     subprocess.Popen([
         'mpg123',
         '-q',
@@ -44,12 +48,10 @@ def play(song_file):
 
 def stop():
     # Synchronous, wait for killing to stop before continuing script
-    print "Stop"
     subprocess.call([
         "killall",
         "mpg123"
     ])
-    print "Stop complete"
 
 
 while True:
@@ -58,6 +60,8 @@ while True:
             if len(songs[pin]) == 0:
                 print 'No songs in folder %s!' % pin
             else:
+                # TODO support cycling through the folder instead of random:
+                # https://stackoverflow.com/questions/2167868/getting-next-element-while-cycling-through-a-list
                 chosen = random.choice(songs[pin])
                 play(chosen)
 
