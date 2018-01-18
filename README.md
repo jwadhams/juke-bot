@@ -32,3 +32,11 @@ sudo amixer  sset PCM,0 100%
 
 Install screen and/or supervisor to run it headless.
 `sudo apt-get install screen supervisor`
+
+
+
+## Thanks
+
+Huge thanks to Adafruit, who make all kinds of great hardware and tutorials, but especially this [Raspberry Pi audio programming tutorial](https://learn.adafruit.com/playing-sounds-and-using-buttons-with-raspberry-pi/fancier-code-a-very-simple-jukebox) which (if ya kinda squint) you can see is the basis for all the wiring and most of the Python in this project.
+
+Thank you to useiconic.com, for the use of the CC icon ["Music Note" via Noun Project](https://thenounproject.com/term/music-note/45498/), which is the basis for the [sound-hold drilling pattern](sound-hole-template.png).
